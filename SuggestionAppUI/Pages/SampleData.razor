@@ -1,0 +1,207 @@
+﻿@page "/SampleData"
+@inject ICategoryData categoryData
+@inject IStatusData statusData
+@inject IUserData userData
+@inject ISuggestionData sugguestionData
+
+<h3>Sample Data</h3>
+
+@if (categoriesCreated)
+{
+    <h4>Categories have been created.</h4>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="CreateCategories">Create Categories</button>
+}
+
+@if (statusesCreated)
+{
+    <h4>Statuses have been created.</h4>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="CreateStatuses">Create Statuses</button>
+}
+<button class="btn btn-danger" @onclick="GenerateSampleData">Generate Sample Data</button>
+@code {
+    bool categoriesCreated = false;
+    bool statusesCreated = false;
+
+    private async Task GenerateSampleData()
+    {
+        UserModel user = new()
+            {
+                FirstName = "Jitesh",
+                LastName = "Mehta",
+                EmailAddress = "jit@test.com",
+                DisplayName = "Sample Jitesh",
+                ObjectIdentifier = "abc-123"
+            };
+        await userData.CreateUser(user);
+
+        var foundUser = await userData.GetUserFromAuthentication("abc-123");
+        var categories = await categoryData.GetAllCategories();
+        var statuses = await statusData.GetAllStatuses();
+        HashSet<string> votes = new();
+        votes.Add("1");
+        votes.Add("2");
+        votes.Add("3");
+
+        SuggestionModel suggestion = new()
+            {
+                Author = new BasicUserModel(foundUser),
+                Category = categories[0],
+                Suggestion = "Our First Suggestion",
+                Description = "This is a suggestion created by the sample data generation method.",
+                ApprovedForRelease = true
+            };
+
+        await sugguestionData.CreateSuggestion(suggestion);
+
+        suggestion = new()
+            {
+                Author = new BasicUserModel(foundUser),
+                Category = categories[1],
+                Suggestion = "Our Second Suggestion",
+                Description = "This is a suggestion created by the sample data generation method.",
+                SuggestionStatus = statuses[0],
+                OwnerNotes = "This is the note for the status.",
+                ApprovedForRelease = true
+            };
+
+        await sugguestionData.CreateSuggestion(suggestion);
+
+        suggestion = new()
+            {
+                Author = new BasicUserModel(foundUser),
+                Category = categories[2],
+                Suggestion = "Our Third Suggestion",
+                Description = "This is a suggestion created by the sample data generation method.",
+                SuggestionStatus = statuses[1],
+                OwnerNotes = "This is the note for the status.",
+                ApprovedForRelease = true
+            };
+
+        await sugguestionData.CreateSuggestion(suggestion);
+
+        suggestion = new()
+            {
+                Author = new BasicUserModel(foundUser),
+                Category = categories[3],
+                Suggestion = "Our Fourth Suggestion",
+                Description = "This is a suggestion created by the sample data generation method.",
+                SuggestionStatus = statuses[2],
+                UserVotes = votes,
+                OwnerNotes = "This is the note for the status.",
+                ApprovedForRelease = true
+            };
+
+        await sugguestionData.CreateSuggestion(suggestion);
+
+        votes.Add("4");
+
+        suggestion = new()
+            {
+                Author = new BasicUserModel(foundUser),
+                Category = categories[4],
+                Suggestion = "Our Fifth Suggestion",
+                Description = "This is a suggestion created by the sample data generation method.",
+                SuggestionStatus = statuses[3],
+                UserVotes = votes,
+                OwnerNotes = "This is the note for the status.",
+                ApprovedForRelease = true
+            };
+
+        await sugguestionData.CreateSuggestion(suggestion);
+    }
+
+    private async Task CreateCategories()
+    {
+        var categories = await categoryData.GetAllCategories();
+
+        if (categories?.Count > 0)
+            return;
+
+        CategoryModel category = new()
+            {
+                CategoryName = "Courses",
+                CategoryDescription = "Full paid courses."
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                CategoryName = "Dev Questions",
+                CategoryDescription = "Advice for being a developer"
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                CategoryName = "In-Depth Tutorial",
+                CategoryDescription = "A deep dive video on how to use a topic."
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                CategoryName = "10-Minute Training",
+                CategoryDescription = "A quick \"How do I use this?\" video."
+            };
+        await categoryData.CreateCategory(category);
+
+        category = new()
+            {
+                CategoryName = "Other",
+                CategoryDescription = "Not sure which category it fits in."
+            };
+        await categoryData.CreateCategory(category);
+
+        categoriesCreated = true;
+    }
+
+    private async Task CreateStatuses()
+    {
+        var statuses = await statusData.GetAllStatuses();
+
+        if (statuses?.Count > 0)
+            return;
+
+        StatusModel status = new()
+            {
+                StatusName = "Completed",
+                StatusDescription = "The suggestion was accepted and the corresponding request is completed."
+            };
+
+        await statusData.CreateStatus(status);
+
+        status = new()
+            {
+                StatusName = "Watching",
+                StatusDescription = "The suggestion is interesting. We are watching to see how much interest there is in it."
+            };
+
+        await statusData.CreateStatus(status);
+
+
+        status = new()
+            {
+                StatusName = "Upcoming",
+                StatusDescription = "The suggestion was accepted and will be released soon."
+            };
+
+        await statusData.CreateStatus(status);
+
+
+        status = new()
+            {
+                StatusName = "Dismissed",
+                StatusDescription = "The suggestion was not something we are going to undertake."
+            };
+
+        await statusData.CreateStatus(status);
+
+        statusesCreated = true;
+    }
+}
