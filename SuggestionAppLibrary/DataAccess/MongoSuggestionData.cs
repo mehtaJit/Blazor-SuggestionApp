@@ -9,7 +9,7 @@ public class MongoSuggestionData : ISuggestionData
     private readonly IDbConnection _db;
     private readonly IUserData _userData;
     private readonly IMongoCollection<SuggestionModel> _suggestions;
-    private const string CacheName = "StatusData";
+    private const string CacheName = "SuggestionData";
     public MongoSuggestionData(IDbConnection db,
                                IUserData userData,
                                IMemoryCache cache)
