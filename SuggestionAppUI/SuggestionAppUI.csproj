@@ -30,11 +30,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Details.razor" />
     <_ContentIncludedByDefault Remove="Pages\SampleData.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Pages\SampleData.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Details.razor" />
   </ItemGroup>
 
 </Project>
