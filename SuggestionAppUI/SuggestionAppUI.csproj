@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Components\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
@@ -31,6 +29,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Details.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Profile.razor" />
     <_ContentIncludedByDefault Remove="Pages\SampleData.razor" />
   </ItemGroup>
 
@@ -40,6 +39,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Details.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Profile.razor" />
   </ItemGroup>
 
 </Project>
